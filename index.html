@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔓 BUNKING SYSTEM 🔓</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00d4ff;
+            --secondary: #64b5f6;
+            --danger: #ff0051;
+            --warning: #ffaa00;
+            --bg-primary: #0a0e2e;
+            --bg-secondary: #0f1550;
+            --bg-tertiary: #151f4f;
+            --text-primary: #00d4ff;
+            --text-secondary: #64b5f6;
+            --text-light: #90caf9;
+        }
+
+        body {
+            font-family: 'Courier New', 'Lucida Console', monospace;
+            background: linear-gradient(135deg, #0a0e2e 0%, #1a0d5e 50%, #0f1550 100%);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Animated Matrix Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0, 212, 255, 0.05) 0px, transparent 1px, transparent 2px, rgba(0, 212, 255, 0.05) 3px),
+                repeating-linear-gradient(90deg, rgba(100, 181, 246, 0.05) 0px, transparent 1px, transparent 2px, rgba(100, 181, 246, 0.05) 3px);
+            pointer-events: none;
+            animation: scanlines 8s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Terminal Header */
+        .terminal-header {
+            background: rgba(10, 14, 39, 0.9);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.4), inset 0 0 20px rgba(100, 181, 246, 0.08);
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { text-shadow: 2px 0 #64b5f6, -2px 0 var(--danger); }
+            50% { text-shadow: -2px 0 #64b5f6, 2px 0 var(--danger); }
+        }
+
+        .header-title {
+            font-size: 2.5em;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .header-subtitle {
+            color: var(--secondary);
+            font-size: 0.9em;
+            letter-spacing: 2px;
+        }
+
+        .header-access {
+            color: var(--warning);
+            font-size: 0.8em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* Stats Dashboard */
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-box {
+            background: rgba(13, 20, 60, 0.8);
+            border: 1.5px solid #64b5f6;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(100, 181, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-box:hover {
+            box-shadow: 0 0 30px rgba(100, 181, 246, 0.6);
+            transform: translateY(-3px);
+            background: rgba(15, 21, 53, 1);
+        }
+
+        .stat-label {
+            color: var(--secondary);
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .stat-value {
+            color: var(--primary);
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        /* Main Grid Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .input-panel {
+            background: rgba(10, 14, 39, 0.9);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .panel-title {
+            color: #00d4ff;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(13, 25, 60, 0.8);
+            border: 1.5px solid #64b5f6;
+            border-radius: 5px;
+            color: #00d4ff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+            background: rgba(13, 25, 60, 1);
+        }
+
+        input::placeholder {
+            color: rgba(100, 181, 246, 0.4);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .checkbox-label {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .holiday-input-group {
+            background: rgba(255, 170, 0, 0.1);
+            border: 1.5px dashed var(--warning);
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .holiday-input-group.active {
+            display: block;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            color: #00d4ff;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        button:hover {
+            background: #00d4ff;
+            color: #0a0e2e;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.7);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .btn-reset {
+            background: rgba(255, 0, 81, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+            box-shadow: 0 0 10px rgba(255, 0, 81, 0.2);
+        }
+
+        .btn-reset:hover {
+            background: var(--danger);
+            color: white;
+            box-shadow: 0 0 25px rgba(255, 0, 81, 0.6);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .result-card.warning {
+            border-color: var(--warning);
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+        }
+
+        .result-card.danger {
+            border-color: var(--danger);
+            box-shadow: 0 0 20px rgba(255, 0, 81, 0.3);
+        }
+
+        .result-title {
+            color: var(--secondary);
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .result-value {
+            color: var(--primary);
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        /* Achievement System */
+        .achievement-box {
+            background: rgba(21, 31, 63, 0.8);
+            border: 1.5px solid var(--text-secondary);
+            border-radius: 5px;
+            padding: 12px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .achievement-icon {
+            font-size: 2em;
+            margin-bottom: 8px;
+        }
+
+        .achievement-text {
+            color: var(--text-secondary);
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin: 20px 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.8em;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(21, 31, 63, 0.8);
+            border: 1.5px solid var(--secondary);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #64b5f6 100%);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.7);
+        }
+
+        .progress-fill.warning {
+            background: linear-gradient(90deg, var(--warning) 0%, #ff6b00 100%);
+            box-shadow: 0 0 15px rgba(255, 170, 0, 0.6);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(90deg, var(--danger) 0%, #ff0000 100%);
+            box-shadow: 0 0 15px rgba(255, 0, 81, 0.6);
+        }
+
+        /* Meme Container */
+        .meme-container {
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+            animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .meme-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 2px solid var(--secondary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            max-height: 300px;
+        }
+
+        .meme-text {
+            color: var(--primary);
+            font-size: 1.2em;
+            font-weight: bold;
+            line-height: 1.6;
+            margin: 15px 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+            margin: 15px 0;
+            border: 2px solid;
+        }
+
+        .status-badge.safe {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: #00d4ff;
+            color: #00d4ff;
+        }
+
+        .status-badge.warning {
+            background: rgba(255, 170, 0, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+
+        .status-badge.danger {
+            background: rgba(255, 0, 81, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* Summary Section */
+        .summary-box {
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed var(--secondary);
+            font-size: 0.9em;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .summary-value {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Leaderboard */
+        .leaderboard-box {
+            background: rgba(10, 14, 39, 0.95);
+            border: 2px solid var(--text-secondary);
+            border-radius: 8px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 0 20px rgba(100, 181, 246, 0.3);
+        }
+
+        .leaderboard-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 8px 0;
+            background: rgba(13, 25, 60, 0.8);
+            border-left: 3px solid #00d4ff;
+            border-radius: 3px;
+        }
+
+        .leaderboard-entry.new {
+            background: rgba(0, 212, 255, 0.15);
+            border-left-color: var(--warning);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .leaderboard-rank {
+            color: #64b5f6;
+            font-weight: bold;
+            min-width: 40px;
+        }
+
+        .leaderboard-name {
+            color: #00d4ff;
+            flex: 1;
+            margin-left: 15px;
+        }
+
+        .leaderboard-score {
+            color: #64b5f6;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.8em;
+            }
+
+            .main-grid,
+            .results-section {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-dashboard {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .result-value {
+                font-size: 2.2em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8em;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-box {
+            background: rgba(0, 212, 255, 0.1);
+            border-left: 3px solid #64b5f6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            color: #64b5f6;
+            font-size: 0.9em;
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2em;
+            background: #00d4ff;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+
+        audio#bgMusic {
+            display: none;
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Music -->
+    <audio id="bgMusic" autoplay loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <!-- Terminal Header -->
+        <div class="terminal-header">
+            <div class="header-title">🔓 BUNKING SYSTEM 🔓</div>
+            <div class="header-subtitle">>> ROOT_HACKER_MODE_ACTIVATED <<</div>
+            <div class="header-access">ACCESS LEVEL: STUDENT | SECURITY STATUS: ANALYZING...</div>
+        </div>
+
+        <!-- Quick Stats Dashboard -->
+        <div class="stats-dashboard" id="statsDashboard">
+            <div class="stat-box">
+                <div class="stat-label">📊 Total Days</div>
+                <div class="stat-value" id="dashboardTotal">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">🎓 Attended</div>
+                <div class="stat-value" id="dashboardAttended">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">💀 Bunked</div>
+                <div class="stat-value" id="dashboardBunked">-</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">🎯 Current %</div>
+                <div class="stat-value" id="dashboardPercent">-</div>
+            </div>
+        </div>
+
+        <!-- Main Input Section -->
+        <div class="main-grid">
+            <!-- Input Panel 1 -->
+            <div class="input-panel">
+                <div class="panel-title">🔐 SYSTEM INPUTS</div>
+                
+                <div class="form-group">
+                    <label for="totalDays">Total Working Days 📅</label>
+                    <input type="number" id="totalDays" placeholder="E.g., 100" min="1">
+                    <div class="error-message" id="errorTotalDays"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="attended">Days You Actually Attended 🎓</label>
+                    <input type="number" id="attended" placeholder="E.g., 75" min="0">
+                    <div class="error-message" id="errorAttended"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="required">Required Attendance % 🎯</label>
+                    <input type="number" id="required" placeholder="E.g., 75" min="0" max="100">
+                    <div class="error-message" id="errorRequired"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="holidays">Planned Holidays (Optional) 🏖️</label>
+                    <input type="number" id="holidays" placeholder="E.g., 5" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Your Hacker Name (Optional) 🕵️</label>
+                    <input type="text" id="username" placeholder="E.g., CodeNinja007">
+                </div>
+            </div>
+
+            <!-- Input Panel 2 -->
+            <div class="input-panel">
+                <div class="panel-title">⚡ ADVANCED OPTIONS</div>
+
+                <div class="info-box">
+                    💡 TIP: Toggle options above to unlock advanced features and track your attendance journey!
+                </div>
+
+                <div class="form-group">
+                    <label for="lastDaysAttended">Last 7 Days Attendance</label>
+                    <input type="number" id="lastDaysAttended" placeholder="E.g., 5 out of 7" min="0" max="7">
+                </div>
+
+                <div class="form-group">
+                    <label for="targetDate">Target Recovery Date 🎯</label>
+                    <input type="date" id="targetDate">
+                </div>
+
+                <div class="form-group">
+                    <label for="semesterWeeks">Weeks Remaining in Semester 📆</label>
+                    <input type="number" id="semesterWeeks" placeholder="E.g., 12" min="0" max="52">
+                </div>
+
+                <div class="form-group">
+                    <label for="riskLevel">Risk Tolerance Level</label>
+                    <select id="riskLevel">
+                        <option value="safe">🟢 SAFE - Maximum Attendance (No Risks)</option>
+                        <option value="moderate" selected>🟡 MODERATE - Balanced (Default)</option>
+                        <option value="risky">🔴 RISKY - Living on Edge (Max Bunks)</option>
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="calculate()">🚀 BREACH SYSTEM</button>
+                    <button class="btn-reset" onclick="reset()">🔄 RESET</button>
+                </div>
+
+                <div class="info-box" style="margin-top: 20px; border-left-color: var(--danger); background: rgba(255, 0, 81, 0.1);">
+                    ⚠️ WARNING: This tool is for fun and educational purposes only. Always maintain good attendance!
+                </div>
+            </div>
+        </div>            <!-- Results Section -->
+        <div id="resultsContainer" class="hidden">
+            <!-- Hacker Name Display -->
+            <div id="hackerNameDisplay" style="text-align: center; margin-bottom: 20px; display: none;">
+                <div style="color: var(--warning); font-size: 1.1em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">👨‍💻 HACKER ACTIVATED 👨‍💻</div>
+                <div style="color: var(--primary); font-size: 2em; font-weight: bold; text-transform: uppercase; letter-spacing: 3px;" id="displayHackerName"></div>
+            </div>
+
+            <div class="results-section">
+                <!-- Attendance Card -->
+                <div class="result-card" id="attendanceCard">
+                    <div class="result-title">📊 SYSTEM SCAN: ATTENDANCE LEVEL</div>
+                    <div class="result-value" id="attendancePercent">0%</div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>PROGRESS TO TARGET</span>
+                            <span id="progressText">0%</span>
+                        </div>
+                        <div class="progress-bar" id="progressBar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="achievement-box" id="achievementBox"></div>
+                </div>
+
+                <!-- Bunk Days Card -->
+                <div class="result-card" id="bunkCard">
+                    <div class="result-title">😎 EXPLOIT AVAILABLE: BUNK DAYS</div>
+                    <div class="result-value" id="bunkDays">0</div>
+                    <div style="color: var(--text-light); font-size: 0.9em; margin-top: 10px;">
+                        <span id="bunkWarning"></span>
+                    </div>
+                    <div class="achievement-box" id="bunkAchievement"></div>
+                </div>
+            </div>
+
+            <!-- Status Badge -->
+            <div style="text-align: center; margin: 25px 0;">
+                <div class="status-badge" id="statusBadge">
+                    <span id="statusEmoji">😎</span> <span id="statusText">ANALYZING</span>
+                </div>
+            </div>
+
+            <!-- Meme Container -->
+            <div class="meme-container">
+                <div style="font-size: 3em; margin-bottom: 15px;" id="memeEmoji">😎</div>
+                <img id="memeImage" src="" alt="Meme" class="meme-image hidden">
+                <div class="meme-text" id="memeText">Loading your destiny...</div>
+            </div>
+
+            <!-- Recovery Plan -->
+            <div id="recoveryPlan" class="input-panel hidden" style="margin-top: 25px;">
+                <div class="panel-title">📈 RECOVERY PLAN</div>
+                <div id="recoveryContent"></div>
+            </div>
+
+            <!-- Holiday Impact -->
+            <div class="info-box" id="holidaySection" style="display: none; margin-top: 25px; border-left-color: var(--warning); background: rgba(255, 170, 0, 0.1);">
+                <div style="color: var(--warning); font-weight: bold; margin-bottom: 8px;">🏖️ HOLIDAY IMPACT ANALYSIS</div>
+                <div id="holidayText"></div>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="summary-box">
+                <h3 style="color: var(--primary); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">📈 DETAILED ANALYTICS</h3>
+                <div class="summary-row">
+                    <span class="summary-label">Total Working Days:</span>
+                    <span class="summary-value" id="summaryTotal">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Days You Attended:</span>
+                    <span class="summary-value" id="summaryAttended">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Days Bunked:</span>
+                    <span class="summary-value" id="summaryBunked">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Available Days (After Holidays):</span>
+                    <span class="summary-value" id="summaryAvailable">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Required Attendance %:</span>
+                    <span class="summary-value" id="summaryRequired">0%</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Days Needed (If Below Target):</span>
+                    <span class="summary-value" id="summaryNeeded" style="color: var(--danger);">0</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Last 7 Days Performance:</span>
+                    <span class="summary-value" id="summaryLast7">-</span>
+                </div>
+                <div id="summaryGPA" class="summary-row" style="display: none;">
+                    <span class="summary-label">Your GPA:</span>
+                    <span class="summary-value" id="summaryGPAValue">-</span>
+                </div>
+            </div>
+
+            <!-- Leaderboard -->
+            <div class="leaderboard-box" id="leaderboardBox" style="display: none;">
+                <h3 style="color: var(--text-secondary); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 2px;">🏆 HACKER LEADERBOARD</h3>
+                <div id="leaderboardContent"></div>
+            </div>
+
+            <!-- GPA Calculator Section -->
+            <div class="input-panel" id="gpaCalculatorSection" style="margin-top: 25px; display: none;">
+                <div class="panel-title">📚 GPA CALCULATOR</div>
+                <div class="info-box" style="margin-bottom: 15px;">
+                    Enter your marks from screenshot and we'll calculate your GPA!
+                </div>
+                <div id="subjectsContainer"></div>
+                <button onclick="addSubject()" style="margin-top: 15px; width: 100%; padding: 12px;">➕ ADD SUBJECT</button>
+                <button onclick="calculateGPA()" style="margin-top: 10px; width: 100%; padding: 12px;">📊 CALCULATE GPA</button>
+                <div id="gpaResult" style="margin-top: 15px; display: none; background: rgba(0, 255, 65, 0.1); border: 2px solid var(--primary); border-radius: 5px; padding: 15px;">
+                    <div style="color: var(--secondary); font-size: 0.85em; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Your Calculated GPA</div>
+                    <div style="color: var(--primary); font-size: 2.5em; font-weight: bold;" id="gpaValue">0.00</div>
+                </div>
+            </div>
+
+            <!-- Chrome Dinosaur Game Section -->
+            <div class="input-panel" id="dinosaurGameSection" style="margin-top: 25px;">
+                <div class="panel-title">🦖 KILL TIME GAME - DINOSAUR RUNNER</div>
+                <div style="background: rgba(21, 31, 63, 0.9); padding: 20px; border-radius: 8px; border: 1.5px solid var(--secondary); text-align: center;">
+                    <canvas id="dinosaurCanvas" width="800" height="200" style="border: 2px solid var(--primary); background: #000; display: block; margin: 0 auto; border-radius: 5px; max-width: 100%;"></canvas>
+                    <div style="color: var(--text-secondary); font-size: 0.85em; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px;">
+                        PRESS SPACEBAR OR CLICK TO JUMP | SURVIVE THE OBSTACLES! 🚀
+                    </div>
+                    <button onclick="startDinosaurGame()" style="margin-top: 15px; padding: 12px 30px;">🎮 START GAME</button>
+                </div>
+            </div>
+
+            <!-- Places to Visit During Bunk Section -->
+            <div class="input-panel" id="bunkPlacesSection" style="margin-top: 25px;">
+                <div class="panel-title">🏫 PLACES TO VISIT DURING BUNK</div>
+                
+                <div class="form-group">
+                    <label for="collegeNameBunk">Which College Are You From? 🎓</label>
+                    <input type="text" id="collegeNameBunk" placeholder="E.g., IIT Madras or search your college..." list="collegeList">
+                    <datalist id="collegeList">
+                        <option value="IIIT Hyderabad">
+                        <option value="NIT Warangal">
+                        <option value="JNTU Hyderabad">
+                        <option value="Osmania University">
+                        <option value="NIT Visakhapatnam">
+                        <option value="Sreenidhi Institute">
+                        <option value="Vignan University">
+                        <option value="SVUCE Tirupati">
+                        <option value="IIT Madras">
+                        <option value="Anna University">
+                        <option value="NIT Trichy">
+                        <option value="VIT Vellore">
+                        <option value="Saveetha University">
+                        <option value="SRM University">
+                        <option value="Sathyabama University">
+                        <option value="PSG College">
+                        <option value="MEPCO Schlenk">
+                        <option value="Crescent University">
+                    </datalist>
+                </div>
+
+                <button onclick="showBunkPlaces()" style="width: 100%; padding: 14px; margin-top: 15px;">🗺️ SHOW PLACES TO VISIT</button>
+
+                <div id="bunkPlacesContent" style="display: none; margin-top: 20px;">
+                    <div style="color: var(--secondary); font-size: 0.9em; margin-bottom: 15px; text-transform: uppercase; font-weight: bold;" id="collegeInfoDisplay"></div>
+                    <div id="placesDisplay"></div>
+                </div>
+            </div>
+
+            <!-- Developer Profile Section -->
+            <div class="profile-section" style="margin-top: 40px; background: rgba(10, 14, 39, 0.95); border: 2px solid var(--secondary); border-radius: 8px; padding: 30px; text-align: center; box-shadow: 0 0 30px rgba(0, 212, 255, 0.3);">
+                <div style="color: var(--secondary); font-size: 0.85em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px;">👨‍💻 TOOL CREATED BY</div>
+                
+                <img id="profileImage" src="https://agi-prod-file-upload-public-main-use1.s3.amazonaws.com/e2a95dc7-9474-456e-80d1-2cfbba2e7103" alt="Developer Profile" style="width: 180px; height: 180px; border-radius: 8px; border: 3px solid var(--primary); margin: 0 auto 20px; box-shadow: 0 0 30px rgba(0, 255, 65, 0.5); object-fit: cover;">
+                
+                <h2 style="color: var(--primary); font-size: 1.5em; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px;">S. KUMAR RAJASEKHAR REDDY</h2>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="color: var(--text-secondary); font-size: 0.95em; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px;">🚀 FULL-STACK DEVELOPER</div>
+                    <div style="color: var(--text-secondary); font-size: 0.95em; margin: 8px 0; text-transform: uppercase; letter-spacing: 1px;">🛡️ CYBERSECURITY ENTHUSIAST</div>
+                </div>
+
+                <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px;">
+                    <a href="https://www.linkedin.com/in/s-kumar-rajasekhar-reddy" target="_blank" style="padding: 12px 25px; background: rgba(0, 119, 181, 0.2); border: 2px solid rgba(0, 119, 181, 0.8); color: rgba(0, 119, 181, 0.9); text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; display: inline-block;" onmouseover="this.style.background='rgba(0, 119, 181, 0.4); this.style.boxShadow='0 0 20px rgba(0, 119, 181, 0.6)';" onmouseout="this.style.background='rgba(0, 119, 181, 0.2); this.style.boxShadow='none';">
+                        🔗 LINKEDIN
+                    </a>
+                    <a href="https://github.com/Rajasekharreddy-12" target="_blank" style="padding: 12px 25px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(255, 255, 255, 0.5); color: rgba(255, 255, 255, 0.8); text-decoration: none; border-radius: 5px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; display: inline-block;" onmouseover="this.style.background='rgba(255, 255, 255, 0.2); this.style.boxShadow='0 0 20px rgba(255, 255, 255, 0.4)';" onmouseout="this.style.background='rgba(255, 255, 255, 0.1); this.style.boxShadow='none';">
+                        🐙 GITHUB
+                    </a>
+                </div>
+
+                <div style="color: var(--warning); font-size: 0.85em; margin-top: 20px; padding-top: 20px; border-top: 1px dashed var(--secondary);">
+                    ⚡ Made with 💻 & Hacker Spirit | Attendance Breach v2.0 | 2026
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MEME_URLS = {
+            veryHigh: 'https://images.unsplash.com/photo-1579546920515-b346f3fbea6e?w=400&h=300&fit=crop',
+            high: 'https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=400&h=300&fit=crop',
+            moderate: 'https://images.unsplash.com/photo-1516214104703-3564f692f0f2?w=400&h=300&fit=crop',
+            warning: 'https://images.unsplash.com/photo-1614644147798-f8c0fc86008d?w=400&h=300&fit=crop',
+            danger: 'https://images.unsplash.com/photo-1633356122544-f134324ef6db?w=400&h=300&fit=crop'
+        };
+
+        let leaderboard = JSON.parse(localStorage.getItem('attendanceLeaderboard')) || [];
+
+        // Background music player
+        window.addEventListener('load', () => {
+            const music = document.getElementById('bgMusic');
+            music.volume = 0.3;
+            music.play().catch(err => console.log('Audio autoplay blocked by browser'));
+        });
+
+        function calculate() {
+            const totalDays = parseInt(document.getElementById('totalDays').value);
+            const attended = parseInt(document.getElementById('attended').value);
+            const required = parseInt(document.getElementById('required').value);
+            const holidays = parseInt(document.getElementById('holidays').value) || 0;
+            const username = document.getElementById('username').value || null;
+            const lastDaysAttended = parseInt(document.getElementById('lastDaysAttended').value) || 0;
+            const semesterWeeks = parseInt(document.getElementById('semesterWeeks').value) || 0;
+            const riskLevel = document.getElementById('riskLevel').value;
+
+            // Display hacker name if provided
+            if (username) {
+                document.getElementById('hackerNameDisplay').style.display = 'block';
+                document.getElementById('displayHackerName').textContent = `🕵️ ${username} 🕵️`;
+            } else {
+                document.getElementById('hackerNameDisplay').style.display = 'none';
+            }
+
+            clearErrors();
+            let isValid = true;
+
+            if (isNaN(totalDays) || totalDays <= 0) {
+                showError('errorTotalDays', 'INVALID: Enter valid total days');
+                isValid = false;
+            }
+            if (isNaN(attended) || attended < 0 || attended > totalDays) {
+                showError('errorAttended', 'INVALID: Days must be 0 to total days');
+                isValid = false;
+            }
+            if (isNaN(required) || required < 0 || required > 100) {
+                showError('errorRequired', 'INVALID: Percentage must be 0-100');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                document.getElementById('resultsContainer').classList.add('hidden');
+                return;
+            }
+
+            const effectiveDays = totalDays - holidays;
+            const attendancePercent = Math.round((attended / totalDays) * 100);
+            const daysNeededForTarget = Math.ceil((required * effectiveDays) / 100);
+            const bunkDaysAllowed = Math.max(0, effectiveDays - daysNeededForTarget);
+            const daysBunked = totalDays - attended - holidays;
+
+            // Update Dashboard
+            document.getElementById('dashboardTotal').textContent = totalDays;
+            document.getElementById('dashboardAttended').textContent = attended;
+            document.getElementById('dashboardBunked').textContent = daysBunked;
+            document.getElementById('dashboardPercent').textContent = `${attendancePercent}%`;
+
+            // Status determination
+            let status, statusEmoji, statusText, memeEmoji, memeText, memeUrl, cardClass;
+
+            if (attendancePercent >= required) {
+                status = 'safe';
+                statusEmoji = '😎';
+                statusText = 'SAFE STATUS';
+                cardClass = 'safe';
+
+                if (attendancePercent >= 95) {
+                    memeEmoji = '🤓';
+                    memeText = 'BRO YOU\'RE A LEGENDARY STUDENT! 🎓 95%+ attendance? You\'re basically a teacher now! 📚✨';
+                    memeUrl = MEME_URLS.veryHigh;
+                } else if (attendancePercent >= 85) {
+                    memeEmoji = '😎';
+                    memeText = 'CRUSHING IT! 🔥 You\'re absolutely SAFE! Still time to strategically bunk if needed! 🚀';
+                    memeUrl = MEME_URLS.high;
+                } else {
+                    memeEmoji = '✌️';
+                    memeText = 'You\'re on the safe side! Time to play chess with your attendance! 🎯';
+                    memeUrl = MEME_URLS.moderate;
+                }
+            } else if (attendancePercent >= required - 10) {
+                status = 'warning';
+                statusEmoji = '⚠️';
+                statusText = 'WARNING MODE';
+                cardClass = 'warning';
+                memeEmoji = '😰';
+                memeText = `YO BUDDY! ⚠️ You need ${daysNeededForTarget - attended} more days to hit ${required}%! START SHOWING UP! 📚`;
+                memeUrl = MEME_URLS.warning;
+            } else {
+                status = 'danger';
+                statusEmoji = '💀';
+                statusText = 'CRITICAL ALERT';
+                cardClass = 'danger';
+                memeEmoji = '💀';
+                memeText = `BRO YOU\'RE COOKED! 🔥 DETENTION INCOMING! You need ${daysNeededForTarget - attended} MORE DAYS! REDEMPTION ARC NOW! 🚨`;
+                memeUrl = MEME_URLS.danger;
+            }
+
+            // Update Results
+            document.getElementById('resultsContainer').classList.remove('hidden');
+
+            // Cards
+            const attendanceCard = document.getElementById('attendanceCard');
+            attendanceCard.className = `result-card ${cardClass}`;
+            document.getElementById('attendancePercent').textContent = `${attendancePercent}%`;
+
+            // Progress Bar
+            const progressPercent = Math.min(100, (attendancePercent / required) * 100);
+            const progressBar = document.getElementById('progressBar');
+            progressBar.className = `progress-bar ${cardClass}`;
+            document.getElementById('progressFill').className = `progress-fill ${cardClass}`;
+            document.getElementById('progressFill').style.width = `${progressPercent}%`;
+            document.getElementById('progressText').textContent = `${Math.round(progressPercent)}%`;
+
+            // Bunk Card
+            const bunkCard = document.getElementById('bunkCard');
+            bunkCard.className = `result-card ${cardClass}`;
+            document.getElementById('bunkDays').textContent = bunkDaysAllowed;
+            document.getElementById('bunkWarning').textContent = bunkDaysAllowed > 0
+                ? `You can safely bunk ${bunkDaysAllowed} more days!`
+                : 'NO MORE BUNKING ALLOWED! ATTEND ALL!';
+
+            // Status Badge
+            document.getElementById('statusBadge').className = `status-badge ${status}`;
+            document.getElementById('statusEmoji').textContent = statusEmoji;
+            document.getElementById('statusText').textContent = statusText;
+
+            // Meme
+            document.getElementById('memeEmoji').textContent = memeEmoji;
+            document.getElementById('memeText').textContent = memeText;
+            if (memeUrl) {
+                document.getElementById('memeImage').src = memeUrl;
+                document.getElementById('memeImage').classList.remove('hidden');
+            }
+
+            // Achievements
+            updateAchievements(attendancePercent, required, bunkDaysAllowed);
+
+            // Holiday Impact
+            if (holidays > 0) {
+                document.getElementById('holidaySection').style.display = 'block';
+                document.getElementById('holidayText').textContent = `Upcoming ${holidays} days off reduce effective days from ${totalDays} to ${effectiveDays}. You need ${daysNeededForTarget} out of ${effectiveDays} remaining days to maintain ${required}%! 🏖️`;
+            } else {
+                document.getElementById('holidaySection').style.display = 'none';
+            }
+
+            // Summary
+            document.getElementById('summaryTotal').textContent = totalDays;
+            document.getElementById('summaryAttended').textContent = attended;
+            document.getElementById('summaryBunked').textContent = daysBunked;
+            document.getElementById('summaryAvailable').textContent = effectiveDays;
+            document.getElementById('summaryRequired').textContent = `${required}%`;
+            document.getElementById('summaryNeeded').textContent = Math.max(0, daysNeededForTarget - attended);
+            document.getElementById('summaryLast7').textContent = lastDaysAttended > 0 ? `${lastDaysAttended}/7` : 'Not Set';
+
+            // GPA Display removed
+
+            // Recovery Plan
+            if (attendancePercent < required) {
+                document.getElementById('recoveryPlan').classList.remove('hidden');
+                const daysPerWeek = Math.ceil((daysNeededForTarget - attended) / (semesterWeeks || 4));
+                document.getElementById('recoveryContent').innerHTML = `
+                    <p style="color: var(--secondary); margin-bottom: 15px;">To reach ${required}% by end of semester, you need to attend:</p>
+                    <div style="background: rgba(21, 31, 63, 0.8); padding: 15px; border-left: 3px solid var(--warning); border-radius: 5px;">
+                        <div style="color: var(--primary); font-size: 1.2em; font-weight: bold;">${daysPerWeek} days/week minimum</div>
+                        <div style="color: var(--text-light); font-size: 0.9em; margin-top: 8px;">Based on ${semesterWeeks} weeks remaining</div>
+                    </div>
+                `;
+            }
+
+            // Leaderboard
+            if (username) {
+                const score = attendancePercent;
+                leaderboard.push({ name: username, score: score, date: new Date().toLocaleDateString() });
+                leaderboard = leaderboard.sort((a, b) => b.score - a.score).slice(0, 10);
+                localStorage.setItem('attendanceLeaderboard', JSON.stringify(leaderboard));
+                updateLeaderboard(username);
+            }
+
+            setTimeout(() => {
+                document.getElementById('resultsContainer').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        function updateAchievements(percent, required, bunks) {
+            const achievementBox = document.getElementById('achievementBox');
+            const bunkAchievement = document.getElementById('bunkAchievement');
+            let achievementText = '';
+            let bunkText = '';
+
+            if (percent >= 95) achievementText = '🌟 LEGEND STATUS';
+            else if (percent >= 85) achievementText = '⭐ EXCELLENT';
+            else if (percent >= required) achievementText = '✅ SAFE';
+            else achievementText = '⚠️ AT RISK';
+
+            if (bunks >= 10) bunkText = '🎯 MAX FREEDOM';
+            else if (bunks >= 5) bunkText = '😎 DECENT FREEDOM';
+            else if (bunks > 0) bunkText = '⏰ LIMITED FREEDOM';
+            else bunkText = '🚫 NO FREEDOM';
+
+            achievementBox.innerHTML = `<div class="achievement-text">${achievementText}</div>`;
+            bunkAchievement.innerHTML = `<div class="achievement-text">${bunkText}</div>`;
+        }
+
+        function updateLeaderboard(currentUser) {
+            const box = document.getElementById('leaderboardBox');
+            box.classList.remove('hidden');
+            let html = '';
+            leaderboard.forEach((entry, index) => {
+                const isNew = entry.name === currentUser;
+                html += `
+                    <div class="leaderboard-entry ${isNew ? 'new' : ''}">
+                        <span class="leaderboard-rank">#${index + 1}</span>
+                        <span class="leaderboard-name">${entry.name}</span>
+                        <span class="leaderboard-score">${entry.score}%</span>
+                    </div>
+                `;
+            });
+            document.getElementById('leaderboardContent').innerHTML = html;
+        }
+
+        function reset() {
+            document.getElementById('totalDays').value = '';
+            document.getElementById('attended').value = '';
+            document.getElementById('required').value = '75';
+            document.getElementById('holidays').value = '';
+            document.getElementById('gpa').value = '';
+            document.getElementById('username').value = '';
+            document.getElementById('lastDaysAttended').value = '';
+            document.getElementById('targetDate').value = '';
+            document.getElementById('semesterWeeks').value = '';
+            document.getElementById('holidayCheck').checked = false;
+            document.getElementById('gpaCheck').checked = false;
+            document.getElementById('nameCheck').checked = false;
+            document.getElementById('holidayGroup').classList.remove('active');
+            document.getElementById('gpaGroup').style.display = 'none';
+            document.getElementById('nameGroup').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('hidden');
+            clearErrors();
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+        }
+
+        function showError(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') calculate();
+        });
+
+        // Empty - college selection moved to results section
+
+        // GPA Calculator Functions
+        let subjectCount = 0;
+
+        function addSubject() {
+            const container = document.getElementById('subjectsContainer');
+            subjectCount++;
+            const subjectDiv = document.createElement('div');
+            subjectDiv.id = `subject-${subjectCount}`;
+            subjectDiv.style.cssText = 'background: rgba(21, 31, 63, 0.8); padding: 15px; border-radius: 5px; margin-bottom: 15px; border-left: 3px solid var(--warning);';
+            subjectDiv.innerHTML = `
+                <div class="form-group">
+                    <label>Subject Name</label>
+                    <input type="text" placeholder="E.g., Data Structures" class="subject-name" style="width: 100%; padding: 10px; background: rgba(15, 21, 53, 0.9); border: 1.5px solid var(--secondary); border-radius: 5px; color: var(--primary); font-family: monospace;">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div class="form-group">
+                        <label>Marks Obtained</label>
+                        <input type="number" placeholder="E.g., 85" class="subject-marks" min="0" max="100" style="width: 100%; padding: 10px; background: rgba(15, 21, 53, 0.9); border: 1.5px solid var(--secondary); border-radius: 5px; color: var(--primary); font-family: monospace;">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Marks</label>
+                        <input type="number" placeholder="E.g., 100" class="subject-total" min="1" value="100" style="width: 100%; padding: 10px; background: rgba(15, 21, 53, 0.9); border: 1.5px solid var(--secondary); border-radius: 5px; color: var(--primary); font-family: monospace;">
+                    </div>
+                </div>
+                <button onclick="removeSubject(${subjectCount})" style="margin-top: 10px; width: 100%; padding: 8px; background: rgba(255, 0, 81, 0.1); border: 1.5px solid var(--danger); color: var(--danger); border-radius: 5px; cursor: pointer; font-weight: bold;">❌ REMOVE</button>
+            `;
+            container.appendChild(subjectDiv);
+        }
+
+        function removeSubject(id) {
+            const element = document.getElementById(`subject-${id}`);
+            if (element) element.remove();
+        }
+
+        function calculateGPA() {
+            const subjects = document.querySelectorAll('#subjectsContainer > div');
+            if (subjects.length === 0) {
+                alert('Add at least one subject!');
+                return;
+            }
+
+            let totalMarks = 0, totalPossible = 0;
+            subjects.forEach(subject => {
+                const marks = parseFloat(subject.querySelector('.subject-marks').value) || 0;
+                const total = parseFloat(subject.querySelector('.subject-total').value) || 100;
+                totalMarks += marks;
+                totalPossible += total;
+            });
+
+            const percentage = (totalMarks / totalPossible) * 100;
+            const gpa = (percentage / 100) * 4;
+
+            document.getElementById('gpaResult').style.display = 'block';
+            document.getElementById('gpaValue').textContent = gpa.toFixed(2);
+        }
+
+        let dinosaurGameState = {
+            running: false,
+            score: 0,
+            dinosaurY: 150,
+            dinosaurVelocity: 0,
+            gravity: 0.5,
+            obstacles: [],
+            gameSpeed: 6,
+            gameLoopId: null
+        };
+
+        let flappyGameState = {
+            running: false,
+            score: 0,
+            birdY: 100,
+            birdVelocity: 0,
+            gravity: 0.4,
+            pipes: [],
+            gameSpeed: 3
+        };
+
+        function startDinosaurGame() {
+            const canvas = document.getElementById('dinosaurCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            flappyGameState.running = true;
+            flappyGameState.score = 0;
+            flappyGameState.birdY = 100;
+            flappyGameState.birdVelocity = 0;
+            flappyGameState.pipes = [];
+
+            const jump = () => {
+                if (flappyGameState.running) {
+                    flappyGameState.birdVelocity = -8;
+                }
+            };
+
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') jump();
+            });
+            canvas.addEventListener('click', jump);
+
+            const gameLoop = () => {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                flappyGameState.birdVelocity += flappyGameState.gravity;
+                flappyGameState.birdY += flappyGameState.birdVelocity;
+
+                ctx.fillStyle = '#ffaa00';
+                ctx.beginPath();
+                ctx.arc(50, flappyGameState.birdY, 12, 0, Math.PI * 2);
+                ctx.fill();
+
+                if (Math.random() < 0.015) {
+                    flappyGameState.pipes.push({ x: canvas.width, gap: 80 });
+                }
+
+                for (let i = flappyGameState.pipes.length - 1; i >= 0; i--) {
+                    flappyGameState.pipes[i].x -= flappyGameState.gameSpeed;
+
+                    ctx.fillStyle = '#00ff41';
+                    ctx.fillRect(flappyGameState.pipes[i].x, 0, 40, 80);
+                    ctx.fillRect(flappyGameState.pipes[i].x, 140, 40, canvas.height - 140);
+
+                    if (flappyGameState.pipes[i].x < -40) {
+                        flappyGameState.pipes.splice(i, 1);
+                        flappyGameState.score += 10;
+                    }
+
+                    if (flappyGameState.pipes[i].x < 80 && flappyGameState.pipes[i].x > 20) {
+                        if (flappyGameState.birdY < 80 || flappyGameState.birdY > 140) {
+                            flappyGameState.running = false;
+                        }
+                    }
+                }
+
+                if (flappyGameState.birdY > canvas.height || flappyGameState.birdY < 0) {
+                    flappyGameState.running = false;
+                }
+
+                ctx.fillStyle = '#00ff41';
+                ctx.font = 'bold 20px Arial';
+                ctx.fillText('SCORE: ' + flappyGameState.score, 10, 30);
+
+                if (!flappyGameState.running) {
+                    ctx.fillStyle = '#ff0051';
+                    ctx.font = 'bold 30px Arial';
+                    ctx.fillText('GAME OVER!', canvas.width / 2 - 100, canvas.height / 2);
+                    ctx.font = '20px Arial';
+                    ctx.fillText('FINAL SCORE: ' + flappyGameState.score, canvas.width / 2 - 80, canvas.height / 2 + 40);
+                    return;
+                }
+
+                requestAnimationFrame(gameLoop);
+            };
+
+            gameLoop();
+        }
+
+        // College Database with places to visit during bunk
+        const COLLEGE_DATABASE = {
+            // TELANGANA
+            "iiit hyderabad": {"city": "Hyderabad", "state": "TS", "places": [
+                "☕ Hitech City Cafes - (2km) - Tech vibe hangout",
+                "🎬 PVR Cinemas Hitech City - (2.5km) - Movie bunk",
+                "🍕 Dominos Madhapur - (1.5km) - Quick food",
+                "🏞️ Durgam Cheruvu Lake - (3km) - Nature walk & photos",
+                "🏢 Inorbit Mall - (4km) - Full day shopping"
+            ]},
+            "nit warangal": {"city": "Warangal", "state": "TS", "places": [
+                "🏰 Warangal Fort - (8km) - Historical exploration",
+                "🌊 Pakhal Lake - (30km) - Water activities",
+                "☕ CityPulse Cafe - (5km) - Chill spot",
+                "🎬 SPI Cinemas - (6km) - Movie hall",
+                "🌳 Government Museum - (7km) - Educational tour"
+            ]},
+            "jntu hyderabad": {"city": "Hyderabad", "state": "TS", "places": [
+                "☕ Gachibowli Cafes - (3km) - Study vibe spots",
+                "🎬 PVR Gachibowli - (2.5km) - Movie escape",
+                "🍕 Dominos Gachibowli - (2km) - Fast food",
+                "🌳 Botanical Garden - (8km) - Nature walk",
+                "⛩️ Charminar - (15km) - Historic sight"
+            ]},
+            "osmania university": {"city": "Hyderabad", "state": "TS", "places": [
+                "🌳 Campus Green Walks - (nearby) - Nature trails",
+                "☕ Kaveri Nagar Cafes - (2km) - Local spots",
+                "🏞️ Hussain Sagar Lake - (10km) - Lake walk",
+                "🎬 PVR Cinemas - (8km) - Movie time",
+                "📚 Salarjung Museum - (8km) - Art & history"
+            ]},
+            // ANDHRA PRADESH
+            "nit visakhapatnam": {"city": "Visakhapatnam", "state": "AP", "places": [
+                "🏖️ Vizag Beach - (8km) - Beach walk",
+                "☕ Beach Road Cafes - (5km) - Sea view chill",
+                "🎬 Asian Cinemas - (6km) - Movie hall",
+                "🍕 Pizza Hut Beach - (7km) - Beach food",
+                "🌳 Zoo Park - (10km) - Zoo visit"
+            ]},
+            "sreenidhi institute": {"city": "Hyderabad", "state": "AP", "places": [
+                "☕ Kukatpally Cafes - (2km) - Quick hangout",
+                "🎬 PVR Kukatpally - (3km) - Movie bunk",
+                "🍕 Dominos - (1.5km) - Fast delivery",
+                "🏢 Forum Value - (4km) - Mall hangout",
+                "🌳 Botanical Gardens - (10km) - Nature escape"
+            ]},
+            "vignan university": {"city": "Guntur", "state": "AP", "places": [
+                "🌳 Undavalli Caves - (20km) - Historical caves",
+                "🏞️ Kondaveedu Fort - (35km) - Historic fort",
+                "☕ Guntur City Cafes - (8km) - Local spots",
+                "🎬 Cinema Hall - (8km) - Movie house",
+                "🍕 Dominos Guntur - (8km) - Food delivery"
+            ]},
+            "svuce tirupati": {"city": "Tirupati", "state": "AP", "places": [
+                "⛩️ Tirupati Temple - (5km) - Spiritual visit",
+                "🏞️ Chandragiri Fort - (15km) - Historic fort",
+                "☕ Temple Road Cafes - (3km) - Local spots",
+                "🎬 Sri Vari Theatre - (8km) - Cinema hall",
+                "🌳 Sri Venkateswara Zoo - (12km) - Zoo visit"
+            ]},
+            // TAMIL NADU
+            "iit madras": {"city": "Chennai", "state": "TN", "places": [
+                "🏖️ Marina Beach - (8km) - Longest beach walk",
+                "☕ Besant Nagar Cafes - (2km) - Coffee hub",
+                "🎬 Sathyam Cinemas - (4km) - Movie marathon",
+                "🍕 Pizza outlets - (3km) - Quick food",
+                "🛕 Kapaleeshwarar Temple - (5km) - Spiritual walk"
+            ]},
+            "anna university": {"city": "Chennai", "state": "TN", "places": [
+                "🏖️ Elliot's Beach - (8km) - Local beach chill",
+                "☕ Velachery Cafes - (3km) - Coffee spots",
+                "🎬 PVR Alandur - (4km) - Movie hall",
+                "🍔 KFC Velachery - (3.5km) - Fast food",
+                "🌳 Arignar Zoo - (12km) - Zoo adventure"
+            ]},
+            "nit trichy": {"city": "Trichy", "state": "TN", "places": [
+                "🏛️ Trichy Rock Fort - (5km) - Historic fort",
+                "⛩️ Ranganatha Temple - (3km) - Temple visit",
+                "☕ Trichy City Cafes - (8km) - Coffee hub",
+                "🎬 Cinema halls - (8km) - Movie time",
+                "🍕 Dominos Trichy - (8km) - Fast food"
+            ]},
+            "vit vellore": {"city": "Vellore", "state": "TN", "places": [
+                "🏰 Vellore Fort - (6km) - Historic fort walk",
+                "☕ Vellore City Cafes - (6km) - Coffee hub",
+                "🎬 Abirami Mega Mall - (6km) - Cinema & mall",
+                "🍕 Pizza outlets - (6km) - Fast food",
+                "⛩️ Jalakanteswara Temple - (7km) - Temple visit"
+            ]},
+            "saveetha university": {"city": "Chennai", "state": "TN", "places": [
+                "☕ Thandalam Cafes - (2km) - Coffee & chill",
+                "🎬 SPI Cinemas Ambattur - (8km) - Movie time",
+                "🍕 Dominos - (2km) - Quick food",
+                "🌳 Nature trails - (around) - Green walks",
+                "🏖️ Marina Beach - (25km) - Beach trip"
+            ]},
+            "srm university": {"city": "Chennai", "state": "TN", "places": [
+                "☕ Kattankulathur Cafes - (2km) - Local spots",
+                "🎬 PVR Chengalpattu - (8km) - Movie hall",
+                "🍕 Dominos - (2km) - Fast food delivery",
+                "⛩️ Kanakeshwara Temple - (5km) - Temple visit",
+                "🏖️ Marina Beach - (30km) - Beach getaway"
+            ]},
+            "psg college": {"city": "Coimbatore", "state": "TN", "places": [
+                "☕ Coimbatore City Cafes - (5km) - Coffee hub",
+                "🎬 City Cinemas - (6km) - Movie halls",
+                "🍕 Dominos - (5km) - Fast food",
+                "🌳 Burliar Springs - (25km) - Waterfall visit",
+                "🏞️ Nilgiris - (80km) - Mountain trip"
+            ]},
+            "mepco schlenk": {"city": "Sivakasi", "state": "TN", "places": [
+                "☕ Sivakasi Cafes - (8km) - Coffee spots",
+                "🎬 Cinema halls - (8km) - Movie halls",
+                "🍕 Food outlets - (8km) - Fast food",
+                "⛩️ Local temples - (nearby) - Spiritual visit",
+                "🏞️ Madurai - (40km trip) - City exploration"
+            ]},
+            "crescent university": {"city": "Chennai", "state": "TN", "places": [
+                "☕ Chetpet Cafes - (2km) - Coffee hub",
+                "🎬 PVR Cinemas - (5km) - Movie halls",
+                "🍕 Pizza outlets - (3km) - Fast food",
+                "🏖️ Marina Beach - (5km) - Beach walk",
+                "🏢 Forum Mall - (4km) - Shopping hangout"
+            ]}
+        };
+
+        // Comprehensive college database with all AP, TN, TS colleges
+        const COLLEGE_DATABASE_FULL = {
+            "iiit hyderabad": {"city": "Hyderabad", "state": "TS", "places": ["☕ Hitech City Cafes - (2km) - Tech vibe hangout", "🎬 PVR Cinemas - (2.5km) - Movie bunk", "🍕 Dominos - (1.5km) - Quick food", "🏞️ Durgam Cheruvu Lake - (3km) - Nature walk", "🏢 Inorbit Mall - (4km) - Shopping"]},
+            "nit warangal": {"city": "Warangal", "state": "TS", "places": ["🏰 Warangal Fort - (8km) - Historical site", "🌊 Pakhal Lake - (30km) - Water activities", "☕ CityPulse Cafe - (5km) - Chill spot", "🎬 SPI Cinemas - (6km) - Movie hall", "🌳 Museum - (7km) - Educational tour"]},
+            "jntu hyderabad": {"city": "Hyderabad", "state": "TS", "places": ["☕ Gachibowli Cafes - (3km) - Study vibe", "🎬 PVR Gachibowli - (2.5km) - Movie", "🍕 Dominos - (2km) - Food", "🌳 Botanical Garden - (8km) - Nature", "⛩️ Charminar - (15km) - Historic"]},
+            "osmania university": {"city": "Hyderabad", "state": "TS", "places": ["🌳 Campus Walks - (nearby) - Green trails", "☕ Cafes - (2km) - Local spots", "🏞️ Hussain Sagar - (10km) - Lake walk", "🎬 PVR Cinemas - (8km) - Movies", "📚 Salarjung Museum - (8km) - Art"]},
+            "nit visakhapatnam": {"city": "Visakhapatnam", "state": "AP", "places": ["🏖️ Vizag Beach - (8km) - Beach walk", "☕ Beach Cafes - (5km) - Sea view", "🎬 Asian Cinemas - (6km) - Movies", "🍕 Pizza Hut - (7km) - Beach food", "🌳 Zoo Park - (10km) - Zoo visit"]},
+            "sreenidhi institute": {"city": "Hyderabad", "state": "AP", "places": ["☕ Kukatpally Cafes - (2km) - Hangout", "🎬 PVR - (3km) - Movie bunk", "🍕 Dominos - (1.5km) - Food", "🏢 Forum - (4km) - Mall", "🌳 Gardens - (10km) - Nature"]},
+            "vignan university": {"city": "Guntur", "state": "AP", "places": ["🌳 Undavalli Caves - (20km) - Caves", "🏞️ Kondaveedu Fort - (35km) - Fort", "☕ Guntur Cafes - (8km) - Local", "🎬 Cinema - (8km) - Movies", "🍕 Dominos - (8km) - Food"]},
+            "svuce tirupati": {"city": "Tirupati", "state": "AP", "places": ["⛩️ Tirupati Temple - (5km) - Spiritual", "🏞️ Chandragiri Fort - (15km) - Fort", "☕ Temple Road - (3km) - Cafes", "🎬 Theatre - (8km) - Movies", "🌳 Zoo - (12km) - Zoo visit"]},
+            "iit madras": {"city": "Chennai", "state": "TN", "places": ["🏖️ Marina Beach - (8km) - Beach walk", "☕ Besant Nagar - (2km) - Coffee", "🎬 Sathyam Cinemas - (4km) - Movies", "🍕 Pizza - (3km) - Food", "🛕 Temple - (5km) - Spiritual"]},
+            "anna university": {"city": "Chennai", "state": "TN", "places": ["🏖️ Elliot's Beach - (8km) - Beach", "☕ Velachery - (3km) - Coffee", "🎬 PVR - (4km) - Movies", "🍔 KFC - (3.5km) - Food", "🌳 Zoo - (12km) - Zoo visit"]},
+            "nit trichy": {"city": "Trichy", "state": "TN", "places": ["🏛️ Rock Fort - (5km) - Historic", "⛩️ Temple - (3km) - Spiritual", "☕ Cafes - (8km) - Coffee", "🎬 Cinema - (8km) - Movies", "🍕 Dominos - (8km) - Food"]},
+            "vit vellore": {"city": "Vellore", "state": "TN", "places": ["🏰 Vellore Fort - (6km) - Historic", "☕ City Cafes - (6km) - Coffee", "🎬 Mall Cinema - (6km) - Movies", "🍕 Pizza - (6km) - Food", "⛩️ Temple - (7km) - Spiritual"]},
+            "saveetha university": {"city": "Chennai", "state": "TN", "places": ["☕ Thandalam - (2km) - Coffee", "🎬 SPI Cinema - (8km) - Movies", "🍕 Dominos - (2km) - Food", "🌳 Trails - (around) - Nature", "🏖️ Beach - (25km) - Beach trip"]},
+            "srm university": {"city": "Chennai", "state": "TN", "places": ["☕ Kattankulathur - (2km) - Local", "🎬 PVR - (8km) - Movies", "🍕 Dominos - (2km) - Food", "⛩️ Temple - (5km) - Spiritual", "🏖️ Beach - (30km) - Beach"]},
+            "psg college": {"city": "Coimbatore", "state": "TN", "places": ["☕ City Cafes - (5km) - Coffee", "🎬 Cinemas - (6km) - Movies", "🍕 Dominos - (5km) - Food", "🌳 Falls - (25km) - Waterfall", "🏞️ Nilgiris - (80km) - Mountains"]},
+            "mepco schlenk": {"city": "Sivakasi", "state": "TN", "places": ["☕ Cafes - (8km) - Coffee", "🎬 Cinema - (8km) - Movies", "🍕 Food - (8km) - Food outlets", "⛩️ Temples - (nearby) - Spiritual", "🏞️ Madurai - (40km) - City trip"]},
+            "crescent university": {"city": "Chennai", "state": "TN", "places": ["☕ Chetpet - (2km) - Coffee", "🎬 PVR - (5km) - Movies", "🍕 Pizza - (3km) - Food", "🏖️ Beach - (5km) - Beach walk", "🏢 Forum - (4km) - Shopping"]}
+        };
+
+        const collegePlacesData = {
+            "iiit hyderabad": {"city": "Hyderabad", "state": "TS", "places": ["☕ Hitech City Cafes - (2km)", "🎬 PVR Cinemas - (2.5km)", "🍕 Dominos - (1.5km)", "🏞️ Durgam Cheruvu Lake - (3km)", "🏢 Inorbit Mall - (4km)"]},
+            "nit warangal": {"city": "Warangal", "state": "TS", "places": ["🏰 Warangal Fort - (8km)", "🌊 Pakhal Lake - (30km)", "☕ Cafes - (5km)", "🎬 SPI Cinemas - (6km)", "🌳 Museum - (7km)"]},
+            "jntu hyderabad": {"city": "Hyderabad", "state": "TS", "places": ["☕ Gachibowli Cafes - (3km)", "🎬 PVR Gachibowli - (2.5km)", "🍕 Dominos - (2km)", "🌳 Botanical Garden - (8km)", "⛩️ Charminar - (15km)"]},
+            "osmania university": {"city": "Hyderabad", "state": "TS", "places": ["🌳 Campus Walks - (nearby)", "☕ Cafes - (2km)", "🏞️ Hussain Sagar - (10km)", "🎬 PVR - (8km)", "📚 Museum - (8km)"]},
+            "nit visakhapatnam": {"city": "Visakhapatnam", "state": "AP", "places": ["🏖️ Vizag Beach - (8km)", "☕ Beach Cafes - (5km)", "🎬 Cinemas - (6km)", "🍕 Pizza - (7km)", "🌳 Zoo - (10km)"]},
+            "sreenidhi institute": {"city": "Hyderabad", "state": "AP", "places": ["☕ Kukatpally Cafes - (2km)", "🎬 PVR - (3km)", "🍕 Dominos - (1.5km)", "🏢 Forum - (4km)", "🌳 Gardens - (10km)"]},
+            "vignan university": {"city": "Guntur", "state": "AP", "places": ["🌳 Undavalli Caves - (20km)", "🏞️ Fort - (35km)", "☕ Cafes - (8km)", "🎬 Cinema - (8km)", "🍕 Dominos - (8km)"]},
+            "svuce tirupati": {"city": "Tirupati", "state": "AP", "places": ["⛩️ Temple - (5km)", "🏞️ Fort - (15km)", "☕ Cafes - (3km)", "🎬 Theatre - (8km)", "🌳 Zoo - (12km)"]},
+            "iit madras": {"city": "Chennai", "state": "TN", "places": ["🏖️ Marina Beach - (8km)", "☕ Besant Nagar - (2km)", "🎬 Cinemas - (4km)", "🍕 Pizza - (3km)", "🛕 Temple - (5km)"]},
+            "anna university": {"city": "Chennai", "state": "TN", "places": ["🏖️ Elliot's Beach - (8km)", "☕ Cafes - (3km)", "🎬 PVR - (4km)", "🍔 KFC - (3.5km)", "🌳 Zoo - (12km)"]},
+            "nit trichy": {"city": "Trichy", "state": "TN", "places": ["🏛️ Rock Fort - (5km)", "⛩️ Temple - (3km)", "☕ Cafes - (8km)", "🎬 Cinema - (8km)", "🍕 Dominos - (8km)"]},
+            "vit vellore": {"city": "Vellore", "state": "TN", "places": ["🏰 Fort - (6km)", "☕ Cafes - (6km)", "🎬 Cinema - (6km)", "🍕 Pizza - (6km)", "⛩️ Temple - (7km)"]},
+            "saveetha university": {"city": "Chennai", "state": "TN", "places": ["☕ Cafes - (2km)", "🎬 Cinema - (8km)", "🍕 Dominos - (2km)", "🌳 Trails - (nearby)", "🏖️ Beach - (25km)"]},
+            "srm university": {"city": "Chennai", "state": "TN", "places": ["☕ Cafes - (2km)", "🎬 PVR - (8km)", "🍕 Dominos - (2km)", "⛩️ Temple - (5km)", "🏖️ Beach - (30km)"]},
+            "psg college": {"city": "Coimbatore", "state": "TN", "places": ["☕ Cafes - (5km)", "🎬 Cinemas - (6km)", "🍕 Dominos - (5km)", "🌳 Waterfall - (25km)", "🏞️ Nilgiris - (80km)"]},
+            "mepco schlenk": {"city": "Sivakasi", "state": "TN", "places": ["☕ Cafes - (8km)", "🎬 Cinema - (8km)", "🍕 Food - (8km)", "⛩️ Temples - (nearby)", "🏞️ Madurai - (40km)"]},
+            "crescent university": {"city": "Chennai", "state": "TN", "places": ["☕ Chetpet - (2km)", "🎬 PVR - (5km)", "🍕 Pizza - (3km)", "🏖️ Beach - (5km)", "🏢 Forum - (4km)"]},
+            "sathyabama university": {"city": "Chennai", "state": "TN", "places": ["☕ Avadi Cafes - (3km)", "🎬 PVR Cinemas - (5km)", "🍕 Dominos - (2km)", "🏖️ Marina Beach - (20km)", "🏢 Shopping Mall - (4km)"]}
+        };
+
+        function showBunkPlaces() {
+            const input = document.getElementById('collegeNameBunk').value.trim().toLowerCase();
+            
+            if (!input) {
+                alert('🚨 Enter college name!');
+                return;
+            }
+
+            let found = null;
+            for (let college in collegePlacesData) {
+                if (college.includes(input) || input.includes(college.split(' ')[0])) {
+                    found = college;
+                    break;
+                }
+            }
+
+            if (!found) {
+                alert('❌ College not found');
+                return;
+            }
+
+            const data = collegePlacesData[found];
+            let html = '';
+            data.places.forEach((place, i) => {
+                html += `<div style="background: rgba(21,31,63,0.8); padding: 12px; margin: 8px 0; border-left: 3px solid #00ff41; border-radius: 5px;">
+                    <div style="color: #00ff41; font-weight: bold;">${i+1}. ${place}</div>
+                </div>`;
+            });
+
+            document.getElementById('collegeInfoDisplay').innerHTML = `📍 ${data.city}, ${data.state}`;
+            document.getElementById('placesDisplay').innerHTML = html;
+            document.getElementById('bunkPlacesContent').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
