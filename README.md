@@ -18,8 +18,7 @@ A fun and interactive web application to calculate student attendance, bunk days
 - JavaScript
 
 ## 🌐 Live Demo
-[https://YOUR_USERNAME.github.io/bunking-system/](https://bunking-system.netlify.app/)
-
+https://bunking-system.netlify.app/
 ## 👨‍💻 Developer
 **S. Kumar Rajasekhar Reddy**  
 - LinkedIn: https://www.linkedin.com/in/s-kumar-rajasekhar-reddy  
